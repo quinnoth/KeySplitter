@@ -14,8 +14,10 @@ def encrypt_asymmetric_key(length):
 	#send to encrypt(s)
 	return False
 
+
 def encrypt_symmetric_key(length):
 	return encrypt(str(os.urandom(length)))
+
 
 def encrypt(s):
 	length = len(s) #if we try to take the length of s for the RNGs after it's been b64 encoded, they'll increase in size by 4/3rds
@@ -31,6 +33,7 @@ def encrypt(s):
 
 	return pieces
 
+
 def decrypt(x, y, z):
 	s = bytearray(os.urandom(len(base64.b64decode(x)))) #the real length needs to be 4/3rds. I also need to figure out how to instantiate mutable byte arrays.
 	
@@ -43,9 +46,30 @@ def decrypt(x, y, z):
 	
 	return s.decode()
 
-test = "This is a test!"
-print(test)
 
+def open_and_read_file(filename):
+	f = open(filename, 'r')
+	text = f.read()
+	f.close()
+	return text
+
+
+def write_keys_to_file(x, y, z):
+	f = open('secret.part1', 'w')
+	f.write(str(x)) #still writes the b'' into the file, so i'll need to resolve that.
+	f.close()
+	f = open('secret.part2', 'w')
+	f.write(str(y))
+	f.close()
+	f = open('secret.part3', 'w')
+	f.write(str(z))
+	f.close()
+
+test = "This is a test!"
+test_file = "test.txt"
+
+#test with just providing a string
+print(test)
 test_pieces = encrypt(test)
 #test_pieces = encrypt_symmetric_key(10)
 print(test_pieces[0])
@@ -53,3 +77,13 @@ print(test_pieces[1])
 print(test_pieces[2])
 test_decryption = decrypt(test_pieces[0], test_pieces[1], test_pieces[2])
 print(test_decryption)
+
+
+print(open_and_read_file(test_file))
+test_file_pieces = encrypt(open_and_read_file(test_file))
+write_keys_to_file(test_file_pieces[0], test_file_pieces[1], test_file_pieces[2])
+print(test_file_pieces[0])
+print(test_file_pieces[1])
+print(test_file_pieces[2])
+test_file_decryption = decrypt(test_file_pieces[0], test_file_pieces[1], test_file_pieces[2])
+print(test_file_decryption)
