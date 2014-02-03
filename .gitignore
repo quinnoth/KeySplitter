@@ -213,3 +213,12 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+#############
+## Project
+#############
+
+# Ignore the Generated Parts
+.part1
+.part2
+.part3

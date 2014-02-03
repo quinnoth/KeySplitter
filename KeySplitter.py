@@ -33,6 +33,17 @@ def encrypt(s):
 
 	return pieces
 
+def open_and_read_files_and_decrypt(filename1, filename2, filename3):
+	f = open(filename1, 'r')
+	part1 = f.read()
+	f.close()
+	f = open(filename2, 'r')
+	part2 = f.read()
+	f.close()
+	f = open(filename3, 'r')
+	part3 = f.read()
+	f.close()
+	return decrypt(part1, part2, part3)
 
 def decrypt(x, y, z):
 	s = bytearray(os.urandom(len(base64.b64decode(x)))) #the real length needs to be 4/3rds. I also need to figure out how to instantiate mutable byte arrays.
@@ -87,3 +98,5 @@ print(test_file_pieces[1])
 print(test_file_pieces[2])
 test_file_decryption = decrypt(test_file_pieces[0], test_file_pieces[1], test_file_pieces[2])
 print(test_file_decryption)
+
+print(open_and_read_files_and_decrypt('secret.part1', 'secret.part2', 'secret.part3'))
