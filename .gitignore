@@ -219,6 +219,7 @@ pip-log.txt
 #############
 
 # Ignore the Generated Parts
-.part1
-.part2
-.part3
+*.part1
+*.part2
+*.part3
+*.msg

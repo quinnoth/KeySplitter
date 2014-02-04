@@ -33,6 +33,7 @@ def encrypt(s):
 
 	return pieces
 
+
 def open_and_read_files_and_decrypt(filename1, filename2, filename3):
 	f = open(filename1, 'r')
 	part1 = f.read()
@@ -45,17 +46,25 @@ def open_and_read_files_and_decrypt(filename1, filename2, filename3):
 	f.close()
 	return decrypt(part1, part2, part3)
 
+
 def decrypt(x, y, z):
-	s = bytearray(os.urandom(len(base64.b64decode(x)))) #the real length needs to be 4/3rds. I also need to figure out how to instantiate mutable byte arrays.
+	s = bytearray(os.urandom(len(x))) #the real length needs to be 4/3rds. I also need to figure out how to instantiate mutable byte arrays.
 	
-	x = base64.b64decode(x)
-	y = base64.b64decode(y)
-	z = base64.b64decode(z)
-	
+	print(x)
+	print(y)
+	print(z)
+	x = x.decode('base64','strict')
+	#x = base64.b64decode(bytes(x, encoding='utf-8'))
+	y = y.decode('base64','strict')
+	z = z.decode('base64','strict')
+	#y = base64.b64decode(bytes(y, encoding='utf-8'))
+	#z = base64.b64decode(bytes(z, encoding='utf-8'))
+
 	for i in range(len(x)):
 		s[i] = (x[i] ^ y[i]) ^ z[i]
 	
-	return s.decode()
+	#return s.decode()
+	return s
 
 
 def open_and_read_file(filename):
@@ -67,18 +76,19 @@ def open_and_read_file(filename):
 
 def write_keys_to_file(x, y, z):
 	f = open('secret.part1', 'w')
-	f.write(str(x)) #still writes the b'' into the file, so i'll need to resolve that.
+	f.write(x.decode('utf-8'))
 	f.close()
 	f = open('secret.part2', 'w')
-	f.write(str(y))
+	f.write(y.decode('utf-8'))
 	f.close()
 	f = open('secret.part3', 'w')
-	f.write(str(z))
+	f.write(z.decode('utf-8'))
 	f.close()
+
 
 test = "This is a test!"
 test_file = "test.txt"
-
+"""
 #test with just providing a string
 print(test)
 test_pieces = encrypt(test)
@@ -88,7 +98,7 @@ print(test_pieces[1])
 print(test_pieces[2])
 test_decryption = decrypt(test_pieces[0], test_pieces[1], test_pieces[2])
 print(test_decryption)
-
+"""
 
 print(open_and_read_file(test_file))
 test_file_pieces = encrypt(open_and_read_file(test_file))
@@ -97,6 +107,6 @@ print(test_file_pieces[0])
 print(test_file_pieces[1])
 print(test_file_pieces[2])
 test_file_decryption = decrypt(test_file_pieces[0], test_file_pieces[1], test_file_pieces[2])
-print(test_file_decryption)
+#print(test_file_decryption)
 
 print(open_and_read_files_and_decrypt('secret.part1', 'secret.part2', 'secret.part3'))
