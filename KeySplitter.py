@@ -1,7 +1,4 @@
-import base64
-import codecs
-import os
-import binascii
+import os, binascii
 """
 AES-128 = 16 bytes
 AES-192 = 24 bytes
@@ -30,7 +27,7 @@ def encrypt(s):
 	z = bytearray(os.urandom(length))
 
 	for i in range(length):
-		z[i] = (s[i] ^ x[i]) ^ y[i]
+		z[i] = s[i] ^ x[i] ^ y[i]
 	
 	x = binascii.hexlify(x)
 	y = binascii.hexlify(y)
@@ -39,6 +36,16 @@ def encrypt(s):
 	pieces = [x, y, z]
 
 	return pieces
+
+	# arrays = []
+	# for i in range(number_of_pieces):
+	# 	arrays.append(bytearray(os.urandom(length)))
+	# for k in range(arrays):
+		#xor with previous piece
+
+# for k in range(number_of_splits, pieces):
+	# for i in range length
+
 
 
 def open_and_read_files_and_decrypt(filename1, filename2, filename3):
@@ -63,7 +70,7 @@ def decrypt(x, y, z):
 	z = bytearray(binascii.unhexlify(z))
 
 	for i in range(len(x)):
-		s[i] = (x[i] ^ y[i]) ^ z[i]
+		s[i] = x[i] ^ y[i] ^ z[i]
 
 	return s.decode('utf-8')
 
